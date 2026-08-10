@@ -56,7 +56,15 @@ class DepartmentController:
         Call service.get_department() and format the result as a
         display-friendly string for the view.
         """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            department = self.service.get_department(department_id)
+            return (
+                f"Department ID: {department.department_id}\n"
+                f"Name: {department.department_name}\n"
+                f"HOD: {department.hod_name}"
+            )
+        except ValueError as error:
+            return f"Error: {error}"
 
     def view_all_departments(self) -> str:
         """

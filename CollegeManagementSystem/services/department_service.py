@@ -62,7 +62,10 @@ class DepartmentService:
         Retrieve a single department by id via the repository. Raise a
         meaningful error (e.g. ValueError) if it does not exist.
         """
-        raise NotImplementedError("Students will implement this feature.")
+        department = self.repository.get_by_id(department_id)
+        if not department:
+            raise ValueError(f"Department with ID {department_id} not found.")
+        return department
 
     def get_all_departments(self) -> List[Department]:
         """

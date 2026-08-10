@@ -34,3 +34,6 @@ def get_connection() -> sqlite3.Connection:
     connection.execute("PRAGMA foreign_keys = ON;")
     connection.row_factory = sqlite3.Row
     return connection
+
+
+

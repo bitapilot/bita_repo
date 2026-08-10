@@ -61,7 +61,24 @@ class DepartmentRepository:
         Hint:
             SELECT * FROM department WHERE department_id = ?
         """
-        raise NotImplementedError("Students will implement this feature.")
+        connection = get_connection()
+        try:
+            cursor = connection.execute(
+                """
+                SELECT * FROM department WHERE department_id = ?
+                """,
+                (department_id,),
+            )
+            row = cursor.fetchone()
+            if row:
+                return Department(
+                    department_id=row[0],
+                    department_name=row[1],
+                    hod_name=row[2]
+                )
+            return None
+        finally:
+            connection.close()
 
     def get_all(self) -> List[Department]:
         """
