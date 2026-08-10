@@ -51,6 +51,7 @@ class DepartmentController:
             return f"Failed to add department: {error}"
 
     def view_department(self, department_id: int) -> str:
+<<<<<<< Updated upstream
         """
         TODO (Student Exercise):
         Call service.get_department() and format the result as a
@@ -58,13 +59,21 @@ class DepartmentController:
         """
         try:
             department = self.service.get_department(department_id)
+=======
+        try:
+            department: Department = self.service.get_department(department_id)
+>>>>>>> Stashed changes
             return (
                 f"Department ID: {department.department_id}\n"
                 f"Name: {department.department_name}\n"
                 f"HOD: {department.hod_name}"
             )
         except ValueError as error:
+<<<<<<< Updated upstream
             return f"Error: {error}"
+=======
+            return f"Failed to view department: {error}"
+>>>>>>> Stashed changes
 
     def view_all_departments(self) -> str:
         """

@@ -60,6 +60,7 @@ class DepartmentView:
         print(message)
 
     def view_department(self) -> None:
+<<<<<<< Updated upstream
         """
         TODO (Student Exercise):
         Ask the user for a department_id, call
@@ -209,6 +210,16 @@ class DepartmentView:
         department_id = input("Enter department ID to view: ")
         message = self.controller.view_department(department_id)
         print(message)
+=======
+        """Collect a department_id and display the department details."""
+        print("\n--- View Department ---")
+        try:
+            department_id = int(input("Enter department ID: "))
+            message = self.controller.view_department(department_id)
+            print(message)
+        except ValueError:
+            print("Invalid input. Please enter a valid integer for department ID.")
+>>>>>>> Stashed changes
 
     def update_department(self) -> None:
         """

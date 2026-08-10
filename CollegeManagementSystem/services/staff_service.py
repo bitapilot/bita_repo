@@ -21,6 +21,7 @@ TODO (Student Exercise):
 
 from typing import List
 
+from models.department import Department
 from models.staff import Staff
 from repositories.staff_repository import StaffRepository
 
@@ -39,19 +40,40 @@ class StaffService:
         email: str,
         department_id: int,
     ) -> Staff:
-        """
-        TODO (Student Exercise):
-        Validate input, build a Staff object, and call
-        self.repository.add(staff).
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        staff_name = staff_name.strip()
+        designation = designation.strip()
+        phone = phone.strip()
+        email = email.strip()
+
+        if not staff_name:
+            raise ValueError("Staff name cannot be empty.")
+        if not designation:
+            raise ValueError("Designation cannot be empty.")
+        if not phone:
+            raise ValueError("Phone cannot be empty.")
+        if not email:
+            raise ValueError("Email cannot be empty.")
+        if "@" not in email:
+            raise ValueError("Invalid email format.")
+
+        staff = Staff(
+            staff_name=staff_name,
+            designation=designation,
+            phone=phone,
+            email=email,
+            department_id=department_id
+        )
+        return self.repository.add(staff)
+    
 
     def get_staff(self, staff_id: int) -> Staff:
-        """
-        TODO (Student Exercise):
-        Retrieve a single staff member by id via the repository.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            staff = self.repository.get_by_id(staff_id)
+            if staff is None:
+                raise ValueError(f"Staff with ID {staff_id} does not exist.")
+            return staff   
+        finally:
+            pass  # Ensure any necessary cleanup here, if needed    
 
     def get_all_staff(self) -> List[Staff]:
         """

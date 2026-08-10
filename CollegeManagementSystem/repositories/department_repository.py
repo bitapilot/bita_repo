@@ -53,6 +53,7 @@ class DepartmentRepository:
             connection.close()
 
     def get_by_id(self, department_id: int) -> Optional[Department]:
+<<<<<<< Updated upstream
         """
         TODO (Student Exercise):
         Fetch a single department row by its primary key and map it to
@@ -67,11 +68,18 @@ class DepartmentRepository:
                 """
                 SELECT * FROM department WHERE department_id = ?
                 """,
+=======
+        try:
+            connection = get_connection()
+            cursor = connection.execute(
+                "SELECT * FROM department WHERE department_id = ?",
+>>>>>>> Stashed changes
                 (department_id,),
             )
             row = cursor.fetchone()
             if row:
                 return Department(
+<<<<<<< Updated upstream
                     department_id=row[0],
                     department_name=row[1],
                     hod_name=row[2]
@@ -79,6 +87,14 @@ class DepartmentRepository:
             return None
         finally:
             connection.close()
+=======
+                    department_id=row[0], department_name=row[1], hod_name=row[2]
+                )
+            else:
+                return None
+        finally:
+            connection.close()  
+>>>>>>> Stashed changes
 
     def get_all(self) -> List[Department]:
         """

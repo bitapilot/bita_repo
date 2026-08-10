@@ -52,11 +52,13 @@ class StudentService:
         raise NotImplementedError("Students will implement this feature.")
 
     def get_student(self, student_id: int) -> Student:
-        """
-        TODO (Student Exercise):
-        Retrieve a single student by id via the repository.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            student = self.repository.get_by_id(student_id)
+            if student is None:
+                raise ValueError(f"Student with ID {student_id} does not exist.")
+            return student   
+        finally:
+            pass  # Ensure any necessary cleanup here, if needed    
 
     def get_all_students(self) -> List[Student]:
         """

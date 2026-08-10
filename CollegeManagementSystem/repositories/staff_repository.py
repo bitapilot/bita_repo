@@ -18,6 +18,8 @@ TODO (Student Exercise):
 
 from typing import List, Optional
 
+from config.database import get_connection
+from models import department
 from models.staff import Staff
 
 
@@ -35,15 +37,38 @@ class StaffRepository:
                 (staff_name, designation, phone, email, department_id)
             VALUES (?, ?, ?, ?, ?)
         """
-        raise NotImplementedError("Students will implement this feature.")
-
+        connection = get_connection()
+        try:
+                cursor = connection.execute(
+                        """
+                        INSERT INTO staff (staff_name, designation, phone, email, department_id)
+                        VALUES (?, ?, ?, ?, ?)
+                        """,
+                        (staff.staff_name, staff.designation, staff.phone, staff.email, staff.department_id),
+                    )
+                connection.commit()
+                staff.staff_id = cursor.lastrowid
+                return staff
+        
+        finally:
+                connection.close()
+        
     def get_by_id(self, staff_id: int) -> Optional[Staff]:
-        """
-        TODO (Student Exercise):
-        Fetch a single staff row by primary key. Return None if not
-        found.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            connection = get_connection()
+            cursor = connection.execute(
+                "SELECT * FROM staff WHERE staff_id = ?",
+                (staff_id,),
+            )
+            row = cursor.fetchone()
+            if row:
+                return Staff(
+                    staff_id=row[0], staff_name=row[1], designation=row[2], phone=row[3], email=row[4], department_id=row[5]
+                )
+            else:
+                return None
+        finally:
+            connection.close()  
 
     def get_all(self) -> List[Staff]:
         """

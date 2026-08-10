@@ -20,7 +20,7 @@ Before running:
     Make sure the database has been created first:
         python database/create_database.py
     Then start the application:
-        python main.py
+        python main.py0
 """
 
 from views.department_view import DepartmentView

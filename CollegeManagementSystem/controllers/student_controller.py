@@ -18,6 +18,8 @@ TODO (Student Exercise):
            for the view to print.
 """
 
+from models.staff import Staff
+from models.student import Student
 from services.student_service import StudentService
 
 
@@ -36,13 +38,30 @@ class StudentController:
         email: str,
         department_id: int,
     ) -> str:
-        """TODO (Student Exercise): See department_controller.add_department for the pattern."""
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            student = self.service.add_student(
+                student_name, gender, dob, phone, email, department_id
+            )   
+            return (
+                    f"Student '{student.student_name}' added successfully "
+                    f"with ID {student.student_id}."
+                )   
+        except ValueError as error:
+            return f"Failed to add student: {error}"    
 
     def view_student(self, student_id: int) -> str:
-        """TODO (Student Exercise): Implement using self.service.get_student()."""
-        raise NotImplementedError("Students will implement this feature.")
-
+        try:
+            student: Student = self.service.get_student(student_id)
+            return (
+                f"Student ID: {student.student_id}\n"
+                f"Name: {student.student_name}\n"
+                f"Gender: {student.gender}\n"
+                f"Date of Birth: {student.dob}\n"
+                f"Phone: {student.phone}\n"
+                f"Email: {student.email}"
+            )
+        except ValueError as error:
+            return f"Failed to view student: {error}"
     def view_all_students(self) -> str:
         """TODO (Student Exercise): Implement using self.service.get_all_students()."""
         raise NotImplementedError("Students will implement this feature.")

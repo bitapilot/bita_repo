@@ -57,6 +57,7 @@ class DepartmentService:
         return self.repository.add(department)
 
     def get_department(self, department_id: int) -> Department:
+<<<<<<< Updated upstream
         """
         TODO (Student Exercise):
         Retrieve a single department by id via the repository. Raise a
@@ -66,6 +67,15 @@ class DepartmentService:
         if not department:
             raise ValueError(f"Department with ID {department_id} not found.")
         return department
+=======
+        try:
+            department = self.repository.get_by_id(department_id)
+            if department is None:
+                raise ValueError(f"Department with ID {department_id} does not exist.")
+            return department   
+        finally:
+            pass  # Ensure any necessary cleanup here, if needed    
+>>>>>>> Stashed changes
 
     def get_all_departments(self) -> List[Department]:
         """

@@ -22,6 +22,8 @@ TODO (Student Exercise):
 
 from typing import List, Optional
 
+from config.database import get_connection
+from models.staff import Staff
 from models.student import Student
 
 
@@ -42,12 +44,21 @@ class StudentRepository:
         raise NotImplementedError("Students will implement this feature.")
 
     def get_by_id(self, student_id: int) -> Optional[Student]:
-        """
-        TODO (Student Exercise):
-        Fetch a single student row by primary key. Return None if not
-        found.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            connection = get_connection()
+            cursor = connection.execute(
+                "SELECT * FROM student WHERE student_id = ?",
+                (student_id,),
+            )
+            row = cursor.fetchone()
+            if row:
+                return Student(
+                    student_id=row[0], student_name=row[1], gender=row[2], dob=row[3], phone=row[4], email=row[5], department_id=row[6]
+                )
+            else:
+                return None
+        finally:
+            connection.close()  
 
     def get_all(self) -> List[Student]:
         """

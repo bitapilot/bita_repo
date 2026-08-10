@@ -46,9 +46,54 @@ class StaffView:
 
             choice = input("Enter your choice: ").strip()
 
-            if choice in ("1", "2", "3", "4"):
-                print("\nTODO:\nStudents will implement this feature.")
+            if choice == "1":
+                self.add_staff()
+            elif choice == "2":
+                self.view_staff()
+            elif choice == "3":
+                self.update_staff()
+            elif choice == "4":
+                self.delete_staff()
             elif choice == "5":
                 break
             else:
                 print("Invalid choice. Please try again.")
+
+    def add_staff(self) -> None:
+        print("\n--- Add Staff ---")
+        staff_name = input("Enter staff name: ")
+        designation = input("Enter designation: ")
+        phone = input("Enter phone: ")
+        email = input("Enter email: ")
+        department_id = int(input("Enter department ID: "))
+
+        message = self.controller.add_staff(staff_name, designation, phone, email, department_id)
+        print(message)
+
+    def view_staff(self) -> None:
+        print("\n--- View Staff ---")
+        try:
+            staff_id = int(input("Enter staff ID: "))
+            message = self.controller.view_staff(staff_id)
+            print(message)
+        except ValueError:
+            print("Invalid input. Please enter a valid integer for staff ID.")
+    
+
+    def update_staff(self) -> None:
+            """
+            TODO (Student Exercise):
+            Ask the user for a staff_id and the new values, call
+            self.controller.update_staff(...), and print the result.
+            """
+            print("\nTODO:\nStudents will implement this feature.")
+    
+    def delete_staff(self) -> None:
+            """
+            TODO (Student Exercise):
+            Ask the user for a staff_id, call
+            self.controller.delete_staff(staff_id), and print the
+            result.
+            """
+            print("\nTODO:\nStudents will implement this feature.")
+    
