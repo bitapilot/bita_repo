@@ -18,6 +18,7 @@ How it communicates with the next layer:
       invalid input) to department_controller.py.
 """
 
+import sqlite3
 from typing import List
 
 from models.department import Department
@@ -70,7 +71,7 @@ class DepartmentService:
         TODO (Student Exercise):
         Retrieve all departments via the repository.
         """
-        raise NotImplementedError("Students will implement this feature.")
+        return self.repository.get_all()
 
     def update_department( self, department_id: int, department_name: str, hod_name: str ) -> bool:
         
@@ -86,17 +87,18 @@ class DepartmentService:
         department = Department(department_id=department_id, department_name=department_name, hod_name=hod_name)
         return self.repository.update(department)
 
-    def delete_department(self, department_id: int) -> bool:
         
-        if not department_id:
-            print("Please Enter valid department id ")
-
-        department = self.repository.get_by_id(department_id)
-        if department is None:
-            raise ValueError(f"Department with ID {department_id} does not exist.")
-
+       
+    def delete_department(self, department_id: int) -> bool:
+        """
+        TODO (Student Exercise):
+        Call repository.delete(). Consider validating that the
+        department exists first, and how to handle the case where
+        students/staff still reference this department.
+        """
         try:
-            deleted = self.repository.delete(department_id)
-            print(f"Department id deletes successfully : {deleted}")
-        except Exception:
-            raise ValueError("Department cannot be deleted while students or staff reference it.")
+            return self.repository.delete(department_id)
+        except sqlite3.IntegrityError as error:
+            raise ValueError(
+                "Cannot delete this department because students or staff are assigned to it."
+            ) from error

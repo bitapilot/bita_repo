@@ -31,11 +31,13 @@ class StudentRepository:
     """Handles all direct database access for the student table."""
 
     def add(self, student: Student) -> Student:
+        """Insert a new student row and return the student with its generated student_id."""
+        connection = get_connection()
         try:
-            connection = get_connection()
             cursor = connection.execute(
                 """
-                INSERT INTO student (student_name, gender, dob, phone, email, department_id)
+                INSERT INTO student
+                    (student_name, gender, dob, phone, email, department_id)
                 VALUES (?, ?, ?, ?, ?, ?)
                 """,
                 (
@@ -45,47 +47,94 @@ class StudentRepository:
                     student.phone,
                     student.email,
                     student.department_id,
-                ), 
+                ),
             )
+            connection.commit()
+            student.student_id = cursor.lastrowid
+            return student
         finally:
             connection.close()
 
     def get_by_id(self, student_id: int) -> Optional[Student]:
+        """Fetch a single student row by primary key. Return None if not found."""
+        connection = get_connection()
         try:
-            connection = get_connection()
-            cursor = connection.execute(
+            row = connection.execute(
                 "SELECT * FROM student WHERE student_id = ?",
                 (student_id,),
-            )
-            row = cursor.fetchone()
-            if row:
-                return Student(
-                    student_id=row[0], student_name=row[1], gender=row[2], dob=row[3], phone=row[4], email=row[5], department_id=row[6]
-                )
-            else:
+            ).fetchone()
+            if row is None:
                 return None
+            return Student(
+                student_id=row["student_id"],
+                student_name=row["student_name"],
+                gender=row["gender"],
+                dob=row["dob"],
+                phone=row["phone"],
+                email=row["email"],
+                department_id=row["department_id"],
+                created_at=row["created_at"],
+            )
         finally:
-            connection.close()  
+            connection.close()
 
     def get_all(self) -> List[Student]:
-        """
-        TODO (Student Exercise):
-        Fetch every row from the student table.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        """Fetch every row from the student table."""
+        connection = get_connection()
+        try:
+            rows = connection.execute(
+                "SELECT * FROM student ORDER BY student_id"
+            ).fetchall()
+            return [
+                Student(
+                    student_id=row["student_id"],
+                    student_name=row["student_name"],
+                    gender=row["gender"],
+                    dob=row["dob"],
+                    phone=row["phone"],
+                    email=row["email"],
+                    department_id=row["department_id"],
+                    created_at=row["created_at"],
+                )
+                for row in rows
+            ]
+        finally:
+            connection.close()
 
     def update(self, student: Student) -> bool:
-        """
-        TODO (Student Exercise):
-        Update an existing student row matching student.student_id.
-        Return True if a row was updated.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        """Update an existing student row matching student.student_id."""
+        connection = get_connection()
+        try:
+            cursor = connection.execute(
+                """
+                UPDATE student
+                SET student_name = ?, gender = ?, dob = ?, phone = ?, email = ?, department_id = ?
+                WHERE student_id = ?
+                """,
+                (
+                    student.student_name,
+                    student.gender,
+                    student.dob,
+                    student.phone,
+                    student.email,
+                    student.department_id,
+                    student.student_id,
+                ),
+            )
+            connection.commit()
+            return cursor.rowcount > 0
+        finally:
+            connection.close()
 
     def delete(self, student_id: int) -> bool:
-        """
-        TODO (Student Exercise):
-        Delete the student row matching student_id. Return True if a
-        row was deleted.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        """Delete the student row matching student_id. Return True if a row was deleted."""
+        connection = get_connection()
+        try:
+            cursor = connection.execute(
+                "DELETE FROM student WHERE student_id = ?",
+                (student_id,),
+            )
+            connection.commit()
+            return cursor.rowcount > 0
+        finally:
+            connection.close()

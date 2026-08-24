@@ -49,7 +49,8 @@ def show_main_menu() -> None:
             student_view.show_menu()
         elif choice == "3":
             staff_view.show_menu()
-        elif choice == "0":
+        elif choice == "0" :
+
             print("Exiting College Management System. Goodbye!")
             break
         else:

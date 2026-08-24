@@ -33,7 +33,8 @@ class DepartmentView:
             print("2. View Department")
             print("3. Update Department")
             print("4. Delete Department")
-            print("5. Back")
+            print("5. View All Departments")
+            print("6. Back")
 
             choice = input("Enter your choice: ").strip()
 
@@ -46,6 +47,9 @@ class DepartmentView:
             elif choice == "4":
                 self.delete_department()
             elif choice == "5":
+                print("\n--- All Departments ---")
+                print(self.controller.view_all_departments())
+            elif choice == "6":
                 break
             else:
                 print("Invalid choice. Please try again.")
@@ -84,11 +88,10 @@ class DepartmentView:
 
     def delete_department(self) -> None:
         """collect a department_id and display the result of the deletion."""
-        print("\n---delete department---")
-        try: 
-            department_id = int(input("Enter department id :"))
+        print("\n--- Delete Department ---")
+        try:
+            department_id = int(input("Enter department ID: "))
             message = self.controller.delete_department(department_id)
             print(message)
-        except ValueError :
+        except ValueError:
             print("Invalid input. Please enter a valid integer for department ID.")
-            

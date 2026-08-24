@@ -30,17 +30,8 @@ class DepartmentController:
         self.service = DepartmentService()
 
     def add_department(self, department_name: str, hod_name: str) -> str:
-        """
-        Handle the "Add Department" use case.
-
-        Args:
-            department_name (str): Raw department name from the view.
-            hod_name (str): Raw HOD name from the view.
-
-        Returns:
-            str: A success message including the new department_id, or
-            an error message if validation failed.
-        """
+       
+    
         try:
             department: Department = self.service.add_department(
                 department_name, hod_name
@@ -54,47 +45,61 @@ class DepartmentController:
 
     def view_department(self, department_id: int) -> str:
         """
-        TODO (Student Exercise):
-        Call service.get_department() and format the result as a
-        display-friendly string for the view.
+        Handle the "View Department" use case.
+
+        Args:
+            department_id (int): The ID of the department to view.
+
+        Returns:
+            str: A formatted string with department details, or an error
+            message if the department was not found.
         """
         try:
-            department = self.service.get_department(department_id)
+            department: Department = self.service.get_department(department_id)
             return (
                 f"Department ID: {department.department_id}\n"
-                f"Name: {department.department_name}\n"
-                f"HOD: {department.hod_name}"
+                f"Department Name: {department.department_name}\n"
+                f"HOD Name: {department.hod_name}"
             )
         except ValueError as error:
             return f"Failed to view department: {error}"
 
     def view_all_departments(self) -> str:
-        try:
-            departments = self.service.get_all_departments()
-            if not departments:
-                return "No departments found."
-            result = "Departments:\n"
-            for dept in departments:
-                result += (
-                    f"ID: {dept.department_id}, "
-                    f"Name: {dept.department_name}, "
-                    f"HOD: {dept.hod_name}\n"
-                )
-            return result
-        except Exception as error:
-            return f"Failed to view all departments: {error}"
+        departments = self.service.get_all_departments()
+        if not departments:
+            return "No departments found."
 
-    def update_department(self, department_id: int, department_name: str, hod_name: str) -> str:
+        return "\n\n".join(
+            f"Department ID: {department.department_id}\n"
+            f"Department Name: {department.department_name}\n"
+            f"HOD Name: {department.hod_name}"
+            for department in departments
+        )
+
+    def update_department(
+        self, department_id: int, department_name: str, hod_name: str
+    ) -> str:
         try:
-            self.service.update_department(department_id, department_name, hod_name)
-            return f"Department ID {department_id} updated successfully."
+            updated: bool = self.service.update_department(
+                department_id, department_name, hod_name
+            )
+            if updated:
+                return f"Department ID {department_id} updated successfully."
+            else:
+                return f"Department ID {department_id} not found. Update failed."
         except ValueError as error:
             return f"Failed to update department: {error}"
-        
-        
+
     def delete_department(self, department_id: int) -> str:
+        """
+        TODO (Student Exercise):
+        Call service.delete_department() and return a success/failure
+        message for the view.
+        """
         try:
-            self.service.delete_department(department_id)
-            return f"Department ID {department_id} deleted successfully."
+            deleted = self.service.delete_department(department_id)
+            if deleted:
+                return f"Department ID {department_id} deleted successfully."
+            return f"Department ID {department_id} not found. Delete failed."
         except ValueError as error:
             return f"Failed to delete department: {error}"

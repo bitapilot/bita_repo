@@ -38,18 +38,41 @@ class StudentController:
         email: str,
         department_id: int,
     ) -> str:
+        """
+        Handle the "Add Student" use case.
+
+        Args:
+            student_name (str): Name of the student.
+            gender (str): Gender of the student.
+            dob (str): Date of birth.
+            phone (str): Phone number.
+            email (str): Email address.
+            department_id (int): ID of the department.
+
+        Returns:
+            str: A success message with the new student ID, or an error message.
+        """
         try:
-            student = self.service.add_student(
+            student: Student = self.service.add_student(
                 student_name, gender, dob, phone, email, department_id
-            )   
+            )
             return (
-                    f"Student '{student.student_name}' added successfully "
-                    f"with ID {student.student_id}."
-                )   
+                f"Student '{student.student_name}' added successfully "
+                f"with ID {student.student_id}."
+            )
         except ValueError as error:
-            return f"Failed to add student: {error}"    
+            return f"Failed to add student: {error}"
 
     def view_student(self, student_id: int) -> str:
+        """
+        Handle the "View Student" use case.
+
+        Args:
+            student_id (int): The ID of the student to view.
+
+        Returns:
+            str: A formatted string with student details, or an error message.
+        """
         try:
             student: Student = self.service.get_student(student_id)
             return (

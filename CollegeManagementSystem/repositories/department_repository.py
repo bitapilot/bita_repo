@@ -67,7 +67,7 @@ class DepartmentRepository:
             else:
                 return None
         finally:
-            connection.close()  
+            connection.close()
 
     def get_all(self) -> List[Department]:
         try:

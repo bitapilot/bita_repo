@@ -19,6 +19,7 @@ TODO (Student Exercise):
         - department_id must refer to an existing department
 """
 
+import sqlite3
 from typing import List
 
 from models.department import Department
@@ -40,31 +41,38 @@ class StaffService:
         email: str,
         department_id: int,
     ) -> Staff:
-        staff_name = staff_name.strip()
-        designation = designation.strip()
-        phone = phone.strip()
-        email = email.strip()
+        try:
+            # Validate input
+            staff_name = staff_name.strip()
+            designation = designation.strip()
+            phone = phone.strip()
+            email = email.strip()
 
-        if not staff_name:
-            raise ValueError("Staff name cannot be empty.")
-        if not designation:
-            raise ValueError("Designation cannot be empty.")
-        if not phone:
-            raise ValueError("Phone cannot be empty.")
-        if not email:
-            raise ValueError("Email cannot be empty.")
-        if "@" not in email:
-            raise ValueError("Invalid email format.")
+            if not staff_name:
+                raise ValueError("Staff name cannot be empty.")
+            if not designation:
+                raise ValueError("Designation cannot be empty.")
+            if not phone:
+                raise ValueError("Phone number cannot be empty.")
+            if not email:
+                raise ValueError("Email cannot be empty.")
+            if "@" not in email:
+                raise ValueError("Email must contain '@'.")
 
-        staff = Staff(
-            staff_name=staff_name,
-            designation=designation,
-            phone=phone,
-            email=email,
-            department_id=department_id
-        )
-        return self.repository.add(staff)
-    
+            staff = Staff(
+                staff_name=staff_name,
+                designation=designation,
+                phone=phone,
+                email=email,
+                department_id=department_id,
+            )
+            return self.repository.add(staff)
+        except sqlite3.IntegrityError as error:
+            raise ValueError(
+                f"Failed to add staff: department_id {department_id} may not exist."
+            ) from error
+        except ValueError as error:
+            raise error
 
     def get_staff(self, staff_id: int) -> Staff:
         try:

@@ -46,9 +46,68 @@ class StudentView:
 
             choice = input("Enter your choice: ").strip()
 
-            if choice in ("1", "2", "3", "4"):
-                print("\nTODO:\nStudents will implement this feature.")
+            if choice == "1":
+                self.add_student()
+            elif choice == "2":
+                self.view_student()
+            elif choice == "3":
+                self.update_student()
+            elif choice == "4":
+                self.delete_student()
             elif choice == "5":
                 break
             else:
                 print("Invalid choice. Please try again.")
+
+    def add_student(self) -> None:
+        try:
+            print("\n--- Add Student ---")
+            student_name = input("Enter student name: ")
+            gender = input("Enter gender: ")
+            dob = input("Enter date of birth (YYYY-MM-DD): ")
+            phone = input("Enter phone number: ")
+            email = input("Enter email: ")
+            department_id = int(input("Enter department ID: "))
+
+            message = self.controller.add_student(
+                student_name, gender, dob, phone, email, department_id
+            )
+            print(message)
+        except ValueError:
+            print("Invalid input. Please enter valid numeric values where required.")
+
+    def view_student(self) -> None:
+        try:
+            print("\n--- View Student ---")
+            student_id = int(input("Enter student ID: "))
+            result = self.controller.view_student(student_id)
+            print(result)
+        except ValueError:
+            print("Failed to view student: Student ID must be a number.")
+
+    def update_student(self) -> None:
+        try:
+            print("\n--- Update Student ---")
+            student_id = int(input("Enter student ID to update: "))
+            student_name = input("Enter new student name: ")
+            gender = input("Enter new gender: ")
+            dob = input("Enter new date of birth (YYYY-MM-DD): ")
+            phone = input("Enter new phone number: ")
+            email = input("Enter new email: ")
+            department_id = int(input("Enter new department ID: "))
+
+            message = self.controller.update_student(
+                student_id, student_name, gender, dob, phone, email, department_id
+            )
+            print(message)
+        except ValueError:
+            print("Failed to update student: Please enter valid data.")
+
+    def delete_student(self) -> None:
+        try:
+            print("\n--- Delete Student ---")
+            student_id = int(input("Enter student ID to delete: "))
+            message = self.controller.delete_student(student_id)
+            print(message)
+        except ValueError:
+            print("Failed to delete student: Student ID must be a number.")
