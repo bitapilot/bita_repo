@@ -71,24 +71,43 @@ class StaffRepository:
             connection.close()  
 
     def get_all(self) -> List[Staff]:
-        """
-        TODO (Student Exercise):
-        Fetch every row from the staff table.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            connection = get_connection()
+            cursor = connection.execute("SELECT * FROM staff")
+            rows = cursor.fetchall()
+            return [
+                Staff(
+                    staff_id=row[0], staff_name=row[1], designation=row[2], phone=row[3], email=row[4], department_id=row[5]
+                )
+                for row in rows 
+            ]
+        finally: 
+            connection.close()
 
     def update(self, staff: Staff) -> bool:
-        """
-        TODO (Student Exercise):
-        Update an existing staff row matching staff.staff_id. Return
-        True if a row was updated.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            connection = get_connection()
+            cursor = connection.execute(
+                """
+                UPDATE staff
+                SET staff_name = ?, designation = ?, phone = ?, email = ?, department_id = ?
+                WHERE staff_id = ?
+                """,
+                (staff.staff_name, staff.designation, staff.phone, staff.email, staff.department_id, staff.staff_id),
+            )
+            connection.commit()
+            return cursor.rowcount > 0  
+        finally:
+            connection.close()
 
     def delete(self, staff_id: int) -> bool:
-        """
-        TODO (Student Exercise):
-        Delete the staff row matching staff_id. Return True if a row
-        was deleted.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            connection = get_connection()
+            cursor = connection.execute(
+                "DELETE FROM staff WHERE staff_id = ?",
+                (staff_id,),
+            )
+            connection.commit()
+            return cursor.rowcount > 0
+        finally:
+            connection.close()

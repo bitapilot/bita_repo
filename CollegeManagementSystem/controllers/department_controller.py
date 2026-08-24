@@ -17,6 +17,8 @@ How it communicates with the next layer:
     - Upward: returns simple result data/messages to department_view.py.
 """
 
+from copy import error
+
 from models.department import Department
 from services.department_service import DepartmentService
 
@@ -51,7 +53,6 @@ class DepartmentController:
             return f"Failed to add department: {error}"
 
     def view_department(self, department_id: int) -> str:
-<<<<<<< Updated upstream
         """
         TODO (Student Exercise):
         Call service.get_department() and format the result as a
@@ -59,44 +60,41 @@ class DepartmentController:
         """
         try:
             department = self.service.get_department(department_id)
-=======
-        try:
-            department: Department = self.service.get_department(department_id)
->>>>>>> Stashed changes
             return (
                 f"Department ID: {department.department_id}\n"
                 f"Name: {department.department_name}\n"
                 f"HOD: {department.hod_name}"
             )
         except ValueError as error:
-<<<<<<< Updated upstream
-            return f"Error: {error}"
-=======
             return f"Failed to view department: {error}"
->>>>>>> Stashed changes
 
     def view_all_departments(self) -> str:
-        """
-        TODO (Student Exercise):
-        Call service.get_all_departments() and format the list as a
-        display-friendly string/table for the view.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            departments = self.service.get_all_departments()
+            if not departments:
+                return "No departments found."
+            result = "Departments:\n"
+            for dept in departments:
+                result += (
+                    f"ID: {dept.department_id}, "
+                    f"Name: {dept.department_name}, "
+                    f"HOD: {dept.hod_name}\n"
+                )
+            return result
+        except Exception as error:
+            return f"Failed to view all departments: {error}"
 
-    def update_department(
-        self, department_id: int, department_name: str, hod_name: str
-    ) -> str:
-        """
-        TODO (Student Exercise):
-        Call service.update_department() and return a success/failure
-        message for the view.
-        """
-        raise NotImplementedError("Students will implement this feature.")
-
+    def update_department(self, department_id: int, department_name: str, hod_name: str) -> str:
+        try:
+            self.service.update_department(department_id, department_name, hod_name)
+            return f"Department ID {department_id} updated successfully."
+        except ValueError as error:
+            return f"Failed to update department: {error}"
+        
+        
     def delete_department(self, department_id: int) -> str:
-        """
-        TODO (Student Exercise):
-        Call service.delete_department() and return a success/failure
-        message for the view.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            self.service.delete_department(department_id)
+            return f"Department ID {department_id} deleted successfully."
+        except ValueError as error:
+            return f"Failed to delete department: {error}"

@@ -64,13 +64,35 @@ class StaffController:
             return f"Failed to view staff member: {error}"
 
     def view_all_staff(self) -> str:
-        """TODO (Student Exercise): Implement using self.service.get_all_staff()."""
-        raise NotImplementedError("Students will implement this feature.")
-
+        try:
+            staff_list = self.service.get_all_staff()
+            if not staff_list:
+                return "No staff members found."
+            return "\n".join(
+                [
+                    f"ID: {staff.staff_id}, Name: {staff.staff_name}, "
+                    f"Designation: {staff.designation}, "
+                    f"Phone: {staff.phone}, Email: {staff.email}"
+                    for staff in staff_list
+                ]
+            )
+        except ValueError as error:
+            return f"Failed to view staff members: {error}"
+        
     def update_staff(self, *args, **kwargs) -> str:
-        """TODO (Student Exercise): Implement using self.service.update_staff()."""
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            updated_staff = self.service.update_staff(*args, **kwargs)
+            staff_id = args[0] if args else kwargs.get("staff_id")
+            if not updated_staff:
+                return f"Failed to update staff member ID {staff_id}: staff member not found."
+            return f"Staff member ID {staff_id} updated successfully."
+        except ValueError as error:
+            return f"Failed to update staff member: {error}"
 
     def delete_staff(self, staff_id: int) -> str:
         """TODO (Student Exercise): Implement using self.service.delete_staff()."""
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            self.service.delete_staff(staff_id)
+            return f"Staff member ID {staff_id} deleted successfully."
+        except ValueError as error:
+            return f"Failed to delete staff member: {error}"

@@ -63,13 +63,36 @@ class StudentController:
         except ValueError as error:
             return f"Failed to view student: {error}"
     def view_all_students(self) -> str:
-        """TODO (Student Exercise): Implement using self.service.get_all_students()."""
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            students = self.service.get_all_students()
+            if not students:
+                return "No students found."
+            result = "All Students:\n"
+            for student in students:
+                result += (
+                    f"ID: {student.student_id}, "
+                    f"Name: {student.student_name}, "
+                    f"Gender: {student.gender}, "
+                    f"DOB: {student.dob}, " 
+                    f"Phone: {student.phone}, "
+                    f"Email: {student.email}\n"
+                )
+            return result
+        except ValueError as error:
+            return f"Failed to view all students: {error}"
 
     def update_student(self, *args, **kwargs) -> str:
         """TODO (Student Exercise): Implement using self.service.update_student()."""
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            updated_student = self.service.update_student(*args, **kwargs)
+            return f"Student ID {updated_student.student_id} updated successfully."
+        except ValueError as error:
+            return f"Failed to update student: {error}"
 
     def delete_student(self, student_id: int) -> str:
         """TODO (Student Exercise): Implement using self.service.delete_student()."""
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            self.service.delete_student(student_id)
+            return f"Student ID {student_id} deleted successfully."
+        except ValueError as error:
+            return f"Failed to delete student: {error}"

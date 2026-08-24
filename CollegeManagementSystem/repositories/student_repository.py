@@ -31,17 +31,24 @@ class StudentRepository:
     """Handles all direct database access for the student table."""
 
     def add(self, student: Student) -> Student:
-        """
-        TODO (Student Exercise):
-        Insert a new student row and return the student with its
-        generated student_id populated.
-
-        Hint:
-            INSERT INTO student
-                (student_name, gender, dob, phone, email, department_id)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            connection = get_connection()
+            cursor = connection.execute(
+                """
+                INSERT INTO student (student_name, gender, dob, phone, email, department_id)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    student.student_name,
+                    student.gender,
+                    student.dob,
+                    student.phone,
+                    student.email,
+                    student.department_id,
+                ), 
+            )
+        finally:
+            connection.close()
 
     def get_by_id(self, student_id: int) -> Optional[Student]:
         try:

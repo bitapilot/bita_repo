@@ -53,83 +53,60 @@ class DepartmentRepository:
             connection.close()
 
     def get_by_id(self, department_id: int) -> Optional[Department]:
-<<<<<<< Updated upstream
-        """
-        TODO (Student Exercise):
-        Fetch a single department row by its primary key and map it to
-        a Department object. Return None if no row is found.
-
-        Hint:
-            SELECT * FROM department WHERE department_id = ?
-        """
-        connection = get_connection()
-        try:
-            cursor = connection.execute(
-                """
-                SELECT * FROM department WHERE department_id = ?
-                """,
-=======
         try:
             connection = get_connection()
             cursor = connection.execute(
                 "SELECT * FROM department WHERE department_id = ?",
->>>>>>> Stashed changes
                 (department_id,),
             )
             row = cursor.fetchone()
             if row:
                 return Department(
-<<<<<<< Updated upstream
-                    department_id=row[0],
-                    department_name=row[1],
-                    hod_name=row[2]
-                )
-            return None
-        finally:
-            connection.close()
-=======
                     department_id=row[0], department_name=row[1], hod_name=row[2]
                 )
             else:
                 return None
         finally:
             connection.close()  
->>>>>>> Stashed changes
 
     def get_all(self) -> List[Department]:
-        """
-        TODO (Student Exercise):
-        Fetch every row from the department table and return a list of
-        Department objects.
-
-        Hint:
-            SELECT * FROM department ORDER BY department_id
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            connection = get_connection()
+            cursor = connection.execute("SELECT * FROM department")
+            rows = cursor.fetchall()
+            return [
+                Department(
+                    department_id=row[0], department_name=row[1], hod_name=row[2]
+                )
+                for row in rows
+            ]
+        finally:
+            connection.close()
 
     def update(self, department: Department) -> bool:
-        """
-        TODO (Student Exercise):
-        Update department_name and hod_name for the row matching
-        department.department_id. Return True if a row was updated.
-
-        Hint:
-            UPDATE department SET department_name = ?, hod_name = ?
-            WHERE department_id = ?
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            connection = get_connection()
+            cursor = connection.execute(
+                """
+                UPDATE department
+                SET department_name = ?, hod_name = ?
+                WHERE department_id = ?
+                """,
+                (department.department_name, department.hod_name, department.department_id),
+            )
+            connection.commit()
+            return cursor.rowcount > 0
+        finally:
+            connection.close()
 
     def delete(self, department_id: int) -> bool:
-        """
-        TODO (Student Exercise):
-        Delete the department row matching department_id. Return True
-        if a row was deleted.
-
-        Hint:
-            DELETE FROM department WHERE department_id = ?
-
-        Note: Because of the foreign key constraint, deleting a
-        department that still has students/staff assigned to it will
-        fail. Think about how you want to handle that case.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        try:
+            connection = get_connection()
+            cursor = connection.execute(
+                "DELETE FROM department WHERE department_id = ?",
+                (department_id,),
+            )
+            connection.commit()
+            return cursor.rowcount > 0
+        finally:
+            connection.close()

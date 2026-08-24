@@ -81,19 +81,24 @@ class StaffView:
     
 
     def update_staff(self) -> None:
-            """
-            TODO (Student Exercise):
-            Ask the user for a staff_id and the new values, call
-            self.controller.update_staff(...), and print the result.
-            """
-            print("\nTODO:\nStudents will implement this feature.")
+        print("\n--- update staff ---")
+        try:
+            staff_id = int(input("Enter staff ID: "))
+            staff_name = input("Enter new staff name: ")
+            designation = input("Enter designation: ")
+            phone = input("Enter phone: ")
+            email = input("Enter email: ")
+            message = self.controller.update_staff(staff_id, staff_name, designation, phone, email)
+            print(message)
+        except ValueError:
+            print("Invalid input. Please enter a valid integer for staff ID.")
+
     
     def delete_staff(self) -> None:
-            """
-            TODO (Student Exercise):
-            Ask the user for a staff_id, call
-            self.controller.delete_staff(staff_id), and print the
-            result.
-            """
-            print("\nTODO:\nStudents will implement this feature.")
-    
+        print("\n--- delete staff ---")
+        try:
+            staff_id = int(input("Enter Staff id"))
+            message = self.controller.delete_staff(staff_id)
+            print(message)
+        except ValueError:
+            print("Invalid input. Please enter a valid integer for staff ID.")

@@ -82,16 +82,54 @@ class StaffService:
         """
         raise NotImplementedError("Students will implement this feature.")
 
-    def update_staff(self, staff: Staff) -> bool:
-        """
-        TODO (Student Exercise):
-        Validate input and call self.repository.update(staff).
-        """
-        raise NotImplementedError("Students will implement this feature.")
+    def update_staff(self, staff_id = int , staff_name = str , designation = str , phone = str , email = str ) -> bool:
+        staff_name = staff_name.strip()
+        designation = designation.strip()
+        phone = phone.strip()
+        email = email.strip()
+
+        if not staff_id:
+            raise ValueError("Staff id cannot be empty.")
+        if not staff_name:
+            raise ValueError("Staff name cannot be empty.")
+        if not designation:
+            raise ValueError("Designation cannot be empty.")
+        if not phone:
+            raise ValueError("Phone cannot be empty.")
+        if not email:
+            raise ValueError("Email cannot be empty.")
+        if "@" not in email:
+            raise ValueError("Invalid email format.")
+
+        existing_staff = self.repository.get_by_id(staff_id)
+        if existing_staff is None:
+            raise ValueError(f"Staff with ID {staff_id} does not exist.")
+
+        staff = Staff(
+            staff_id=staff_id,
+            staff_name=staff_name,
+            designation=designation,
+            phone=phone,
+            email=email,
+            department_id=existing_staff.department_id,
+        )
+        return self.repository.update(staff)        
+
+
 
     def delete_staff(self, staff_id: int) -> bool:
-        """
-        TODO (Student Exercise):
-        Call self.repository.delete(staff_id).
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        if not staff_id:
+            print("Please Enter valid staff id")
+
+        staff = self.repository.get_by_id(staff_id)
+        if staff is None:
+            raise ValueError(f"Staff with ID {staff_id} does not exist.")  
+
+        try:
+            deleted = self.repository.delete(staff_id)
+            print(f"Staff id deletes successfully : {deleted}")
+        except Exception:
+            raise ValueError("Staff cannot be deleted while department or staff reference it.")    
+                  
+
+

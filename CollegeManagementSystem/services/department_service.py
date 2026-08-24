@@ -57,17 +57,6 @@ class DepartmentService:
         return self.repository.add(department)
 
     def get_department(self, department_id: int) -> Department:
-<<<<<<< Updated upstream
-        """
-        TODO (Student Exercise):
-        Retrieve a single department by id via the repository. Raise a
-        meaningful error (e.g. ValueError) if it does not exist.
-        """
-        department = self.repository.get_by_id(department_id)
-        if not department:
-            raise ValueError(f"Department with ID {department_id} not found.")
-        return department
-=======
         try:
             department = self.repository.get_by_id(department_id)
             if department is None:
@@ -75,7 +64,6 @@ class DepartmentService:
             return department   
         finally:
             pass  # Ensure any necessary cleanup here, if needed    
->>>>>>> Stashed changes
 
     def get_all_departments(self) -> List[Department]:
         """
@@ -84,22 +72,31 @@ class DepartmentService:
         """
         raise NotImplementedError("Students will implement this feature.")
 
-    def update_department(
-        self, department_id: int, department_name: str, hod_name: str
-    ) -> bool:
-        """
-        TODO (Student Exercise):
-        Validate input (reuse the same rules as add_department) and
-        call repository.update(). Consider what should happen if the
-        department_id does not exist.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+    def update_department( self, department_id: int, department_name: str, hod_name: str ) -> bool:
+        
+        department_id = department_id
+        department_name = department_name.strip()
+        hod_name = hod_name.strip()
+
+        if not department_name:
+            raise ValueError("Department name cannot be empty.")
+        if not hod_name:
+            raise ValueError("HOD name cannot be empty.")
+            
+        department = Department(department_id=department_id, department_name=department_name, hod_name=hod_name)
+        return self.repository.update(department)
 
     def delete_department(self, department_id: int) -> bool:
-        """
-        TODO (Student Exercise):
-        Call repository.delete(). Consider validating that the
-        department exists first, and how to handle the case where
-        students/staff still reference this department.
-        """
-        raise NotImplementedError("Students will implement this feature.")
+        
+        if not department_id:
+            print("Please Enter valid department id ")
+
+        department = self.repository.get_by_id(department_id)
+        if department is None:
+            raise ValueError(f"Department with ID {department_id} does not exist.")
+
+        try:
+            deleted = self.repository.delete(department_id)
+            print(f"Department id deletes successfully : {deleted}")
+        except Exception:
+            raise ValueError("Department cannot be deleted while students or staff reference it.")
