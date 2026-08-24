@@ -26,6 +26,7 @@ Before running:
 from views.department_view import DepartmentView
 from views.staff_view import StaffView
 from views.student_view import StudentView
+from leave_let.leave import LeaveLetterGenerator
 
 
 def show_main_menu() -> None:
@@ -59,3 +60,7 @@ def show_main_menu() -> None:
 
 if __name__ == "__main__":
     show_main_menu()
+
+
+
+

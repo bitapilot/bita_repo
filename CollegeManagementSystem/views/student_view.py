@@ -21,6 +21,7 @@ TODO (Student Exercise):
 """
 
 from controllers.student_controller import StudentController
+from leave_let.leave import input_leave_details
 
 
 class StudentView:
@@ -42,7 +43,8 @@ class StudentView:
             print("2. View Student")
             print("3. Update Student")
             print("4. Delete Student")
-            print("5. Back")
+            print("5. Leave Letter")
+            print("6. Back")
 
             choice = input("Enter your choice: ").strip()
 
@@ -55,6 +57,8 @@ class StudentView:
             elif choice == "4":
                 self.delete_student()
             elif choice == "5":
+                input_leave_details()
+            elif choice == "6":
                 break
             else:
                 print("Invalid choice. Please try again.")
